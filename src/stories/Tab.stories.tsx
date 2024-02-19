@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from "@storybook/react";
-import Nav from "@components/Nav";
+import Tab from "@components/Tab";
 
 const meta: Meta = {
+  component: Tab,
   tags: ["autodocs"],
-  component: Nav,
   argTypes: {
     size: {
       options: ["small", "medium", "large", "larger"],
@@ -14,13 +14,13 @@ const meta: Meta = {
 
 export default meta;
 
-export const Navigation: StoryObj<typeof Nav> = {
+export const TheTab: StoryObj<typeof Tab> = {
   args: {
     size: "medium",
   },
   render: (args) => (
-    <Nav {...args}>
-      <p className="min-w-[100px]">Label</p>
-    </Nav>
+    <Tab {...args}>
+      <p>Label</p>
+    </Tab>
   ),
 };

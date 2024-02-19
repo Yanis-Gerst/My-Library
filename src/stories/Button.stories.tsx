@@ -2,8 +2,8 @@ import { Meta, StoryObj } from "@storybook/react";
 import Button from "@components/Button/Button";
 
 const meta: Meta = {
-  title: "Remarkable",
   component: Button,
+  tags: ["autodocs"],
   argTypes: {
     theme: {
       options: [
@@ -14,9 +14,7 @@ const meta: Meta = {
         "danger",
         "success",
       ],
-      control: {
-        type: "select",
-      },
+      control: "select",
     },
     size: {
       options: ["small", "medium", "large", "larger"],

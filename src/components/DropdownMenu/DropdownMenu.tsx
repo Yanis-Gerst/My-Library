@@ -3,10 +3,6 @@ import useToogle from "@hooks/useToogle";
 import { ChevronDown } from "lucide-react";
 import React from "react";
 
-// Two Options for implemantions
-// Relatively place content. Cons can content overflow
-// Flexbox . Cons layout shift on opening if align center
-
 type IDropdownAlignement = "left" | "center" | "right";
 
 interface Props extends React.AllHTMLAttributes<HTMLDivElement> {
@@ -43,7 +39,7 @@ const DropdownMenu: React.FC<Props> = ({
 
       {isOpen && (
         <div
-          className={`flex flex-col p-2 absolute bottom-0 translate-y-[calc(100%+0.5rem)] ${getAlignementStyle(
+          className={`flex flex-col p-2 absolute bottom-0 bg-neutral-lowest rounded-lg translate-y-[calc(100%+0.5rem)] ${getAlignementStyle(
             align
           )}`}
         >

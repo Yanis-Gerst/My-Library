@@ -4,8 +4,8 @@ import useToogle from "@hooks/useToogle";
 import { X } from "lucide-react";
 
 const meta: Meta = {
-  title: "Modal",
   component: Modal,
+  tags: ["autodocs"],
 };
 
 //TODO: Test Case

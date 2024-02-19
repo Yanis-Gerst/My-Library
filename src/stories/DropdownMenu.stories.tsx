@@ -3,8 +3,8 @@ import DropdownMenu from "@components/DropdownMenu";
 import Nav from "@components/Nav";
 
 const meta: Meta = {
-  title: "Remarkable ",
   component: DropdownMenu,
+  tags: ["autodocs"],
   argTypes: {
     align: {
       options: ["left", "center", "right"],
