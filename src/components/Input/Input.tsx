@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 type IInputSize = "small" | "medium" | "large";
 
@@ -7,7 +7,10 @@ export type IInputTheme = "primary" | "warning" | "danger" | "success";
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   paddingSize: IInputSize;
   theme: IInputTheme;
+  leftIcon?: React.ReactNode;
+  children?: React.ReactNode;
   label?: string;
+  placeholder?: string;
 }
 
 const getInputSizeStyle = (size: IInputSize) => {
@@ -21,31 +24,54 @@ const getInputSizeStyle = (size: IInputSize) => {
   }
 };
 
+const getLabelSizeStyle = (size: IInputSize) => {
+  switch (size) {
+    case "small":
+      return "left-3";
+    case "medium":
+      return "left-4";
+    case "large":
+      return "left-6";
+  }
+};
 const defaultBackground = "bg-neutral-lowest";
 
 const getBackgroundThemeStyle = (theme: IInputTheme) => {
   switch (theme) {
     case "primary":
-      return "focus:bg-primary-lowest disabled:bg-neutral-lower";
+      return "group-focus-within:bg-primary-lowest focus-within:bg-primary-lowest disabled:bg-neutral-lower";
     case "success":
-      return "focus:bg-success-lowest disabled:bg-success-lower";
+      return "group-focus-within:bg-success-lowest focus-within:bg-success-lowest disabled:bg-success-lower";
     case "danger":
-      return "focus:bg-danger-lowest disabled:bg-danger-lower";
+      return "group-focus-within:bg-danger-lowest focus-within:bg-danger-lowest disabled:bg-danger-lower";
     case "warning":
-      return "focus:bg-warning-lowest disabled:bg-warning-lower";
+      return "group-focus-within:bg-warning-lowest focus-within:bg-warning-lowest disabled:bg-warning-lower";
+  }
+};
+
+const getBorderThemeStyle = (theme: IInputTheme) => {
+  switch (theme) {
+    case "primary":
+      return "border border-neutral-low focus-within:border-primary-low";
+    case "success":
+      return "border border-success-low";
+    case "danger":
+      return "border border-danger-low";
+    case "warning":
+      return "border border-warning-low";
   }
 };
 
 const getInputThemeStyle = (theme: IInputTheme) => {
   switch (theme) {
     case "primary":
-      return "text-neutral-highest border border-neutral-low focus:border-primary-low disabled:text-neutral-medium ";
+      return "text-neutral-highest disabled:text-neutral-medium ";
     case "success":
-      return "text-success-highest border border-success-low disabled:text-success-low";
+      return "text-success-highest disabled:text-success-low";
     case "danger":
-      return "text-danger-highest border border-danger-low disabled:text-danger-low";
+      return "text-danger-highest disabled:text-danger-low";
     case "warning":
-      return "text-warning-highest border border-warning-low disabled:text-warning-low";
+      return "text-warning-highest disabled:text-warning-low";
   }
 };
 
@@ -62,28 +88,66 @@ const getLabelThemeStyle = (theme: IInputTheme) => {
   }
 };
 
-const Input: React.FC<Props> = ({ paddingSize, theme, label, id, ...args }) => {
+const getPlaceholderThemeStyle = (theme: IInputTheme) =>
+  `placeholder:${getLabelThemeStyle(theme)}`;
+
+const Input: React.FC<Props> = ({
+  paddingSize,
+  theme,
+  label,
+  id,
+  placeholder,
+  leftIcon,
+  children,
+  className,
+  ...args
+}) => {
+  const labelElt = useRef<HTMLLabelElement>(null);
+  const [labelBackgroundWidth, setLabelBackgroundWidth] = useState(0);
+  useEffect(() => {
+    if (!labelElt.current) return;
+    setLabelBackgroundWidth((labelElt.current?.clientWidth || 0) * 1.1);
+  }, [labelElt]);
+
   return (
-    <div className="relative">
+    <div
+      className={`relative group w-fit rounded-lg flex gap-[0.375rem] items-center ${defaultBackground} ${getBackgroundThemeStyle(
+        theme
+      )} ${getBorderThemeStyle(theme)} ${getInputSizeStyle(paddingSize)}`}
+    >
       {label && (
-        <label
-          className={`${defaultBackground} ${getBackgroundThemeStyle(
-            theme
-          )} ${getLabelThemeStyle(theme)} absolute left-0 top-0 px-[0.25rem]`}
-          htmlFor={id}
-        >
-          {label}
-        </label>
+        <>
+          <div
+            style={{
+              width: `${labelBackgroundWidth}px`,
+            }}
+            className={`absolute top-0 ${defaultBackground} ${getBackgroundThemeStyle(
+              theme
+            )} ${getLabelSizeStyle(
+              paddingSize
+            )} -translate-x-[5%] h-1 -translate-y-[1.1px]`}
+          ></div>
+          <label
+            className={`${getLabelThemeStyle(theme)} ${getLabelSizeStyle(
+              paddingSize
+            )} absolute top-0 px-1 -translate-y-1/2 text-[10px]`}
+            htmlFor={id}
+            ref={labelElt}
+          >
+            {label}
+          </label>
+        </>
       )}
+      {leftIcon}
       <input
         id={id}
-        className={`${getInputSizeStyle(
-          paddingSize
-        )} ${defaultBackground} ${getBackgroundThemeStyle(
+        className={` ${getInputThemeStyle(theme)} ${getPlaceholderThemeStyle(
           theme
-        )} ${getInputThemeStyle(theme)} min-w-[200px] rounded-lg outline-none`}
+        )} ${className} outline-none bg-transparent`}
+        placeholder={placeholder}
         {...args}
       />
+      {children}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 import Input from "@components/Input";
+import { ChevronDownIcon } from "lucide-react";
 
 const meta: Meta = {
   tags: ["autodocs"],
@@ -18,12 +19,17 @@ const meta: Meta = {
 
 export default meta;
 
-export const Inputigation: StoryObj<typeof Input> = {
+export const TheInput: StoryObj<typeof Input> = {
   args: {
     paddingSize: "medium",
     theme: "primary",
     label: "Label",
+    placeholder: "",
     id: "storybook-input",
   },
-  render: (args) => <Input {...args} />,
+  render: (args) => (
+    <Input {...args} className="min-w-[300px]" leftIcon={<ChevronDownIcon />}>
+      <ChevronDownIcon />
+    </Input>
+  ),
 };
